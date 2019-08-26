@@ -28,10 +28,6 @@ public class DbConnecionProvider implements ConnectionProvider<DbConnection> {
     @Parameter
     private String password;
 
-    @DisplayName("Table Name")
-    @Parameter
-    private String tableName;
-
 
     @Override
     public DbConnection connect() throws ConnectionException {
@@ -41,7 +37,6 @@ public class DbConnecionProvider implements ConnectionProvider<DbConnection> {
         dbConnection.setDbName(this.databaseName);
         dbConnection.setUserName(this.userName);
         dbConnection.setPassword(this.password);
-        dbConnection.setTableName(this.tableName);
         try {
             dbConnection.connect();
         }catch (Exception ex){

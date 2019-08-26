@@ -7,10 +7,9 @@ import org.mule.extension.internal.connection.DbConnection;
 import org.mule.runtime.api.meta.ExpressionSupport;
 import org.mule.runtime.extension.api.annotation.Expression;
 import org.mule.runtime.extension.api.annotation.param.*;
+import org.mule.runtime.extension.api.annotation.param.Connection;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -53,15 +52,17 @@ public class BasicOperations {
 //  }
 
   @MediaType(value = ANY, strict = false)
-  public void logMesage(@Expression(ExpressionSupport.REQUIRED) String messasge, @Connection DbConnection dbConnection,@Config BasicConfiguration configuration){
+  public void logMesage(@Expression(ExpressionSupport.REQUIRED) String messasge,@Expression(ExpressionSupport.REQUIRED) String referenceNumber, @Connection DbConnection dbConnection,@Config BasicConfiguration configuration){
     if(saveToDatabase) {
       java.sql.Connection con = dbConnection.getCon();
       try {
-        String sql = "INSERT into custom_connector(corelationId,log_level,message) values (?,?,?)";
+        String sql = "INSERT into "+configuration.getTableName()+"("+configuration.getReferenceNumberColumn()+","+configuration.getLogLevelColumn()+","+configuration.getMessageColumn()+","+configuration.getDataColumn()+") values (?,?,?,?)";
+        System.out.println("executing sql query -----------------"+sql);
         PreparedStatement preparedStatement = con.prepareStatement(sql);
-        preparedStatement.setString(1, configuration.isStoreCorelation() ? UUID.randomUUID().toString().replaceAll("-", "") : null);
+        preparedStatement.setString(1, referenceNumber);
         preparedStatement.setString(2, this.loggerLevel.name());
         preparedStatement.setString(3, messasge);
+        preparedStatement.setTimestamp(4,new Timestamp(new java.util.Date().getTime()));
         int rowsInserted = preparedStatement.executeUpdate();
         if (rowsInserted <= 0) {
           throw new RuntimeException("row not inserted");

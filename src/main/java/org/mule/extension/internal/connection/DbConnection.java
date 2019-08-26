@@ -12,8 +12,6 @@ public class DbConnection {
 
     private String password;
 
-    private String tableName;
-
     private Connection con;
 
 
@@ -45,18 +43,18 @@ public class DbConnection {
 
     public boolean isValid()throws SQLException{
         if(con!= null && con.isValid(1000)) {
-            System.out.println("--------------- con is valid");
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * \n" +
-                    "FROM information_schema.tables\n" +
-                    "WHERE table_schema = '" + this.dbName + "' \n" +
-                    "    AND table_name = '" + this.tableName + "' LIMIT 1");
-            System.out.println("--------------- rs  "+rs);
-
-            if (rs.first()) {
-                return true;
-            }
-            return false;
+//            System.out.println("--------------- con is valid");
+//            Statement stmt = con.createStatement();
+//            ResultSet rs = stmt.executeQuery("SELECT * \n" +
+//                    "FROM information_schema.tables\n" +
+//                    "WHERE table_schema = '" + this.dbName + "' \n" +
+//                    "    AND table_name = '" + this.tableName + "' LIMIT 1");
+//            System.out.println("--------------- rs  "+rs);
+//
+//            if (rs.first()) {
+//                return true;
+//            }
+            return true;
         }
         return false;
     }
@@ -91,14 +89,6 @@ public class DbConnection {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
     }
 
     public Connection getCon() {

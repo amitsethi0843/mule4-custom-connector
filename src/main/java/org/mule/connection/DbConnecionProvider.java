@@ -1,42 +1,50 @@
-package org.mule.extension.internal.connection;
+package org.mule.connection;
 
 import org.mule.runtime.api.connection.ConnectionException;
 import org.mule.runtime.api.connection.ConnectionProvider;
 import org.mule.runtime.api.connection.ConnectionValidationResult;
+import org.mule.runtime.extension.api.annotation.param.Optional;
 import org.mule.runtime.extension.api.annotation.param.Parameter;
 import org.mule.runtime.extension.api.annotation.param.display.DisplayName;
-
-import java.sql.SQLException;
+import org.mule.runtime.extension.api.annotation.param.display.Password;
 
 public class DbConnecionProvider implements ConnectionProvider<DbConnection> {
 
 
     @DisplayName("Database Provider")
     @Parameter
+    @Optional
     private ProviderType databaseType;
 
+    @DisplayName("URL")
+    @Parameter
+    @Optional
+    private String url;
+    
+    @DisplayName("Username")
+    @Parameter
+    @Optional
+    private String userName;
+    
+    @DisplayName("Password")
+    @Parameter
+    @Optional
+    @Password
+    private String password;
 
     @DisplayName("Database Name")
     @Parameter
+    @Optional
     private String databaseName;
-
-    @DisplayName("Username")
-    @Parameter
-    private String userName;
-
-    @DisplayName("Password")
-    @Parameter
-    private String password;
-
 
     @Override
     public DbConnection connect() throws ConnectionException {
-
         DbConnection dbConnection=new DbConnection();
         dbConnection.setType(this.databaseType);
         dbConnection.setDbName(this.databaseName);
         dbConnection.setUserName(this.userName);
         dbConnection.setPassword(this.password);
+        dbConnection.setURL(this.url);
         try {
             dbConnection.connect();
         }catch (Exception ex){

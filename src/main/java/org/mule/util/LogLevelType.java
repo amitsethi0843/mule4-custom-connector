@@ -1,4 +1,4 @@
-package org.mule.extension.internal;
+package org.mule.util;
 
 public enum LogLevelType {
     ERROR,WARNING,INFO;

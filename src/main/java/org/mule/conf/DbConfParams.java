@@ -1,22 +1,11 @@
-package org.mule.extension.internal;
+package org.mule.conf;
 
-import org.mule.extension.internal.connection.DbConnecionProvider;
-import org.mule.runtime.extension.api.annotation.Operations;
-import org.mule.runtime.extension.api.annotation.connectivity.ConnectionProviders;
 import org.mule.runtime.extension.api.annotation.param.Optional;
 import org.mule.runtime.extension.api.annotation.param.Parameter;
 import org.mule.runtime.extension.api.annotation.param.display.DisplayName;
 
-/**
- * This class represents an extension configuration, values set in this class are commonly used across multiple
- * operations since they represent something core from the extension.
- */
-@Operations(BasicOperations.class)
-@ConnectionProviders(DbConnecionProvider.class)
-public class BasicConfiguration {
-
-
-    @DisplayName("Table Name")
+public class DbConfParams {
+	@DisplayName("Table Name")
     @Parameter
     private String tableName;
 

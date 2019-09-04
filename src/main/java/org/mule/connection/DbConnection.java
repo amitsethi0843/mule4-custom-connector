@@ -1,4 +1,4 @@
-package org.mule.extension.internal.connection;
+package org.mule.connection;
 
 import java.sql.*;
 
@@ -10,6 +10,8 @@ public class DbConnection {
 
     private String userName;
 
+    private String url;
+    
     private String password;
 
     private Connection con;
@@ -17,19 +19,25 @@ public class DbConnection {
 
 
     public boolean connect() throws SQLException,ClassNotFoundException {
-
-        switch (type){
-            case MYSQL:
-                Class.forName("com.mysql.jdbc.Driver");
-                con= DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/"+this.dbName,this.userName,this.password);
-                break;
-            default:
-                Class.forName("com.mysql.jdbc.Driver");
-                con= DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/sonoo","root","root");
-        }
-        return con.isValid(1000);
+    	if(!logToFiles()) {
+	        switch (type){
+	            case MYSQL:
+	                Class.forName("com.mysql.jdbc.Driver");
+	                con= DriverManager.getConnection(
+	                        "jdbc:mysql://"+this.url+"/"+this.dbName,this.userName,this.password);
+	                break;
+	            default:
+	                Class.forName("com.mysql.jdbc.Driver");
+	                con= DriverManager.getConnection(
+	                        "jdbc:mysql://localhost:3306/sonoo","root","root");
+	        }
+	        return con.isValid(1000);
+    	}
+    	else
+    	{
+    		return true;
+    	}
+    	
     }
 
     public void disconnect(){
@@ -42,7 +50,7 @@ public class DbConnection {
     }
 
     public boolean isValid()throws SQLException{
-        if(con!= null && con.isValid(1000)) {
+        if(logToFiles() || (con!= null && con.isValid(1000))) {
 //            System.out.println("--------------- con is valid");
 //            Statement stmt = con.createStatement();
 //            ResultSet rs = stmt.executeQuery("SELECT * \n" +
@@ -90,8 +98,19 @@ public class DbConnection {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public void setURL(String url) {
+    	this.url=url;
+    }
 
     public Connection getCon() {
         return con;
+    }
+    
+    public boolean logToFiles() {
+    	if(this.url == null && this.dbName==null && this.userName==null && this.password == null) {
+    		return true;
+    	}
+    	return false;
     }
 }

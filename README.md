@@ -1,4 +1,4 @@
-# Basic Extension
+# Mule 4 custom logging module/connector
 
 Installation steps:-
 

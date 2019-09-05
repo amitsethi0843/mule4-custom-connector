@@ -26,6 +26,11 @@ public class DbConnection {
 	                con= DriverManager.getConnection(
 	                        "jdbc:mysql://"+this.url+"/"+this.dbName,this.userName,this.password);
 	                break;
+	            case ORACLEDB:
+	                Class.forName("oracle.jdbc.driver.OracleDriver");
+	                con= DriverManager.getConnection(
+	                        "jdbc:oracle:thin:@"+this.url,this.userName,this.password);
+	                break;
 	            default:
 	                Class.forName("com.mysql.jdbc.Driver");
 	                con= DriverManager.getConnection(
